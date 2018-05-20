@@ -9,15 +9,13 @@ void *inicio,**PosicaoAtual;
 unsigned long long posicao,fim;
 unsigned short TamanhoTipo;
 public:
-lista(){
-TamanhoTipo=sizeof(Type)+TAMVOID;
+lista():TamanhoTipo(sizeof(Type)+TAMVOID){
 inicio=malloc(TamanhoTipo);
 PosicaoAtual=(void**)inicio;
 posicao=fim=0;
 }
 
-lista(Type a){
-TamanhoTipo=sizeof(Type)+TAMVOID;
+lista(Type a):TamanhoTipo(sizeof(Type)+TAMVOID){
 inicio=malloc(TamanhoTipo);
 PosicaoAtual=(void**)inicio;
 posicao=fim=0;
