@@ -9,13 +9,7 @@ void *inicio,**PosicaoAtual;
 unsigned long long posicao,fim;
 unsigned short TamanhoTipo;
 public:
-lista():TamanhoTipo(sizeof(Type)+TAMVOID){
-inicio=malloc(TamanhoTipo);
-PosicaoAtual=(void**)inicio;
-posicao=fim=0;
-}
-
-lista(Type a):TamanhoTipo(sizeof(Type)+TAMVOID){
+lista(Type a=0) : TamanhoTipo(sizeof(Type)+TAMVOID){
 inicio=malloc(TamanhoTipo);
 PosicaoAtual=(void**)inicio;
 posicao=fim=0;
@@ -48,23 +42,6 @@ gotox(fim);
 }
 }
 
-void escreve(Type a){
-*(Type*)(PosicaoAtual+TAMVOID)=a;
-}
-
-Type le(){
-return *(Type*)(PosicaoAtual+TAMVOID);
-}
+void escreve(Type a) {*(Type*)(PosicaoAtual+TAMVOID)=a;}
+Type le() {return *(Type*)(PosicaoAtual+TAMVOID);}
 };
-
-int main(){
-lista<int> as(32);
-as.addpos(1);
-as.gotox(1);
-as.escreve(5210);
-as.gotox(0);
-printf("%i\n",as.le());
-as.gotox(1);
-printf("%i\n",as.le());
-return 0;
-}
