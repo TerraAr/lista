@@ -1,5 +1,5 @@
-#include<stdlib.h>
 #include<stdio.h>
+#include<stdlib.h>
 
 static const char* fora_da_lista = "ERRO: Posição inexistente.\n";
 
@@ -7,11 +7,12 @@ const unsigned short TAMVOID=sizeof(void*);
 
 template <class Type> class lista{
 private:
-void *inicio,**PosicaoAtual;
+const void *inicio;
+void **PosicaoAtual;
 unsigned long long posicao,fim;
 const unsigned short TamanhoTipo;
 
-void gotox(unsigned long long x){
+inline void gotox(unsigned long long x){
 if(x<posicao){
 posicao=0;
 PosicaoAtual=(void**)inicio;
@@ -21,8 +22,7 @@ PosicaoAtual=(void**)*PosicaoAtual;
 }
 
 public:
-lista(Type a=0) : TamanhoTipo(sizeof(Type)+TAMVOID){
-inicio=malloc(TamanhoTipo);
+lista(Type a=0) : TamanhoTipo(sizeof(Type)+TAMVOID), inicio(malloc(TamanhoTipo)){
 PosicaoAtual=(void**)inicio;
 posicao=fim=0;
 *(Type*)(PosicaoAtual+TAMVOID)=a;
@@ -33,7 +33,7 @@ while(fim>0){
 gotox(--fim);
 free(*PosicaoAtual);
 }
-free(inicio);
+free((void*)inicio);
 }
 
 bool gotopos(unsigned long long x){
