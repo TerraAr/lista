@@ -1,13 +1,25 @@
 #include<stdlib.h>
 #include<stdio.h>
 
+static const char* fora_da_lista = "ERRO: Posição inexistente.\n";
+
 const unsigned short TAMVOID=sizeof(void*);
 
 template <class Type> class lista{
 private:
 void *inicio,**PosicaoAtual;
 unsigned long long posicao,fim;
-unsigned short TamanhoTipo;
+const unsigned short TamanhoTipo;
+
+void gotox(unsigned long long x){
+if(x<posicao){
+posicao=0;
+PosicaoAtual=(void**)inicio;
+}
+for(;x>posicao;posicao++)
+PosicaoAtual=(void**)*PosicaoAtual;
+}
+
 public:
 lista(Type a=0) : TamanhoTipo(sizeof(Type)+TAMVOID){
 inicio=malloc(TamanhoTipo);
@@ -24,7 +36,7 @@ free(*PosicaoAtual);
 free(inicio);
 }
 
-bool gotox(unsigned long long x){
+bool gotopos(unsigned long long x){
 if(x>fim) return 0;
 if(x<posicao){
 posicao=0;
@@ -44,4 +56,11 @@ gotox(fim);
 
 void escreve(Type a) {*(Type*)(PosicaoAtual+TAMVOID)=a;}
 Type le() {return *(Type*)(PosicaoAtual+TAMVOID);}
+
+inline Type& operator[](const unsigned long long);
 };
+
+template <class Type> inline Type& lista<Type>::operator[](const unsigned long long pos){
+if(!gotopos(pos)) fprintf(stderr,"%s",fora_da_lista);
+return *(Type*)(PosicaoAtual+TAMVOID);
+}
