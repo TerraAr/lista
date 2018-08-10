@@ -57,10 +57,10 @@ gotox(fim);
 void escreve(Type a) {*(Type*)(PosicaoAtual+TAMVOID)=a;}
 Type le() {return *(Type*)(PosicaoAtual+TAMVOID);}
 
-inline Type& operator[](const unsigned long long);
+Type& operator[](const unsigned long long);
 };
 
-template <class Type> inline Type& lista<Type>::operator[](const unsigned long long pos){
+template <class Type> Type& lista<Type>::operator[](const unsigned long long pos){
 if(!gotopos(pos)) fprintf(stderr,"%s",fora_da_lista);
 return *(Type*)(PosicaoAtual+TAMVOID);
 }
