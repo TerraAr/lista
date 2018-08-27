@@ -17,10 +17,8 @@ if(x<posicao){
 posicao=0;
 PosicaoAtual=(void*)inicio;
 }
-for(;x>posicao;posicao++){
-void **temp=(void**)PosicaoAtual;
-PosicaoAtual=*temp;
-}
+for(;x>posicao;posicao++)
+PosicaoAtual=*(void**)PosicaoAtual;
 }
 
 public:
@@ -38,24 +36,25 @@ free(PosicaoAtual);
 free((void*)inicio);
 }
 
-bool gotopos(unsigned long long x){
-if(x>fim) return 0;
+void gotopos(unsigned long long x){
+if(x>fim){
+fprintf(stderr,"%s",fora_da_lista);
+return (void)1;
+}
 if(x<posicao){
 posicao=0;
 PosicaoAtual=(void*)inicio;
 }
 for(;x>posicao;posicao++){
-void **temp=(void**)PosicaoAtual;
-PosicaoAtual=*temp;
+PosicaoAtual=*(void**)PosicaoAtual;
 }
-return 1;
+return (void)0;
 }
 
 void addpos(unsigned long long a){
 for(;a>0;fim++,a--){
 gotox(fim);
-void **temp=(void**)PosicaoAtual;
-*temp=malloc(TamanhoTipo);
+*(void**)PosicaoAtual=malloc(TamanhoTipo);
 }
 }
 
@@ -66,6 +65,6 @@ inline Type& operator[](const unsigned long long);
 };
 
 template <class Type> inline Type& lista<Type>::operator[](const unsigned long long pos){
-if(!gotopos(pos)) fprintf(stderr,"%s",fora_da_lista);
+gotopos(pos);
 return *(Type*)(PosicaoAtual+TAMVOID);
 }
