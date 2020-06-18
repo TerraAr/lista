@@ -1,73 +1,58 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include"lista.h"
 
-static const char* fora_da_lista = "ERRO: Posição inexistente.\n";
+template <class Type> inline void lista<Type>::gotox(unsigned long long x){
+	if(x < posicao){
+		posicao = 0ULL;
+		PosicaoAtual = inicio;
+	}
+	for(; x > posicao; posicao++)
+		PosicaoAtual = *(void**)PosicaoAtual;
+	}
 
-const size_t TAMVOID=sizeof(void*);
+template <class Type> lista<Type>::lista(Type a){
+	inicio = malloc(TamanhoTipo);
+	PosicaoAtual = inicio;
+	posicao = fim = 0ULL;
+	* (Type*) (PosicaoAtual+TAMVOID) = a;
+}
 
-template <class Type> class lista{
-	private:
-		void *inicio, *PosicaoAtual;
-		unsigned long long posicao, fim;
-		const size_t TamanhoTipo;
+template <class Type> lista<Type>::~lista(){
+	while(fim > 0ULL){
+		gotox(fim--);
+		free(PosicaoAtual);
+	}
+	free(inicio);
+}
 
-		inline void gotox(unsigned long long x)
-				__attribute__((always_inline)){
-			if(x < posicao){
-				posicao = 0ULL;
-				PosicaoAtual = inicio;
-			}
-			for(; x > posicao; posicao++)
-				PosicaoAtual = *(void**)PosicaoAtual;
-		}
+template <class Type> void lista<Type>::gotopos(unsigned long long x){
+	if(x > fim){
+		fputs(fora_da_lista, stderr);
+		return (void)1;
+	}
+	if(x < posicao){
+		posicao = 0ULL;
+		PosicaoAtual = inicio;
+	}
+	for(; x>posicao; posicao++){
+		PosicaoAtual = *(void**)PosicaoAtual;
+	}
+	return (void)0;
+}
 
-	public:
-		lista(Type a = 0ULL) : TamanhoTipo(sizeof(Type) + TAMVOID){
-			inicio = malloc(TamanhoTipo);
-			PosicaoAtual = inicio;
-			posicao = fim = 0ULL;
-			* (Type*) (PosicaoAtual+TAMVOID) = a;
-		}
+template <class Type> void lista<Type>::addpos(unsigned long long a){
+	for(; a>0ULL; fim++, a--){
+		gotox(fim);
+		*(void**)PosicaoAtual = malloc(TamanhoTipo);
+	}
+}
 
-		~lista(){
-			while(fim > 0ULL){
-				gotox(fim--);
-				free(PosicaoAtual);
-			}
-			free(inicio);
-		}
+template <class Type> void lista<Type>::escreve(Type a){
+	*((Type*) (PosicaoAtual + TAMVOID)) = a;
+}
 
-		void gotopos(unsigned long long x){
-			if(x > fim){
-				fputs(fora_da_lista, stderr);
-				return (void)1;
-			}
-			if(x < posicao){
-				posicao = 0ULL;
-				PosicaoAtual = inicio;
-			}
-			for(; x>posicao; posicao++){
-				PosicaoAtual = *(void**)PosicaoAtual;
-			}
-			return (void)0;
-		}
-
-		void addpos(unsigned long long a){
-			for(; a>0ULL; fim++, a--){
-				gotox(fim);
-				*(void**)PosicaoAtual =
-					malloc(TamanhoTipo);
-			}
-		}
-
-		void escreve(Type a){
-			*((Type*) (PosicaoAtual + TAMVOID)) = a;
-		}
-		Type le() {return * (Type*) (PosicaoAtual + TAMVOID);}
-
-		inline Type& operator[](const unsigned long long)
-					__attribute__((always_inline));
-};
+template <class Type> Type lista<Type>::le(){
+	return * (Type*) (PosicaoAtual + TAMVOID);
+}
 
 template <class Type> inline Type& lista<Type>::operator[]
 					(const unsigned long long pos){
