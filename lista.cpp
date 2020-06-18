@@ -11,7 +11,8 @@ template <class Type> class lista{
 		unsigned long long posicao, fim;
 		const size_t TamanhoTipo;
 
-		inline void gotox(unsigned long long x){
+		inline void gotox(unsigned long long x)
+				__attribute__((always_inline)){
 			if(x < posicao){
 				posicao = 0ULL;
 				PosicaoAtual = inicio;
@@ -33,7 +34,7 @@ template <class Type> class lista{
 				gotox(fim--);
 				free(PosicaoAtual);
 			}
-			free((void*)inicio);
+			free(inicio);
 		}
 
 		void gotopos(unsigned long long x){
@@ -43,29 +44,29 @@ template <class Type> class lista{
 			}
 			if(x < posicao){
 				posicao = 0ULL;
-				PosicaoAtual = (void*)inicio;
+				PosicaoAtual = inicio;
 			}
 			for(; x>posicao; posicao++){
 				PosicaoAtual = *(void**)PosicaoAtual;
 			}
 			return (void)0;
-			}
+		}
 
-			void addpos(unsigned long long a){
-				for(; a>0ULL; fim++, a--){
-					gotox(fim);
-					*(void**)PosicaoAtual =
-						malloc(TamanhoTipo);
-				}
+		void addpos(unsigned long long a){
+			for(; a>0ULL; fim++, a--){
+				gotox(fim);
+				*(void**)PosicaoAtual =
+					malloc(TamanhoTipo);
 			}
+		}
 
-			void escreve(Type a){
-				*((Type*)(PosicaoAtual+TAMVOID)) = a;
-			}
-			Type le() {return * (Type*) (PosicaoAtual + TAMVOID);}
+		void escreve(Type a){
+			*((Type*) (PosicaoAtual + TAMVOID)) = a;
+		}
+		Type le() {return * (Type*) (PosicaoAtual + TAMVOID);}
 
-			inline Type& operator[](const unsigned long long)
-						__attribute__((always_inline));
+		inline Type& operator[](const unsigned long long)
+					__attribute__((always_inline));
 };
 
 template <class Type> inline Type& lista<Type>::operator[]
