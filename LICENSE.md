@@ -9,21 +9,22 @@ PROPÓSITO DE COMERCIALIZAÇÃO DESTE CÓDIGO.
 
 #### <span id="section1"></span>1. Permissões de Uso.
 A permissão é concedida, gratuitamente, a qualquer pessoa que obtenha
-uma cópia deste software e arquivos de documentação associados (o
-"Software"), para negociar no Software sem restrições, incluindo sem
-limitação os direitos de uso, cópia, modificação, fusão, publicação,
-distribuição, sublicença e/ou venda de cópias do Software, e para
-permitir que as pessoas a quem o Software seja fornecido para fazê-lo,
-sujeitos às seguintes condições:
+uma cópia deste *software* e arquivos de documentação associados (o
+"*Software*"), para negociar no *Software* sem restrições, incluindo
+sem limitação os direitos de uso, cópia, modificação, fusão,
+publicação, distribuição, sublicença e/ou venda de cópias do Software,
+e para permitir que as pessoas a quem o Software seja fornecido para
+fazê-lo, sujeitos às seguintes condições:
 
  - O aviso de direitos autorais acima e estes avisos de permissão devem
-   ser incluídos em todas as cópias ou partes substanciais do Software.
- - Caso o software seja modificado ou seja base para um trabalho
+   ser incluídos em todas as cópias ou partes substanciais do
+   *Software*.
+ - Caso o *software* seja modificado ou seja base para um trabalho
    (tratado a partir daqui apenas como "trabalho"), o trabalho deve
    levar avisos proeminentes afirmando que você o modificou e dando uma
    data relevante.
  - O trabalho deve levar avisos proeminentes afirmando que ele está
-   lançado sob esta licença.
+   lançado sob esta Licença.
  - Você deve licenciar o trabalho, como um todo, sob esta Licença para
    qualquer pessoa que entre na posse de uma cópia. Esta Licença,
    portanto, se aplicará a totalidade do trabalho e todas as suas partes,
@@ -61,7 +62,7 @@ diferentes; para uma interface GUI, você usaria uma caixa "about"
 #### <span id="section2"></span>2. Aceitação Não Exigida para Ter Cópias.
 
 Você não é obrigado a aceitar esta Licença para receber ou executar uma
-cópia do software. A propagação auxiliar de um trabalho coberto que
+cópia do *software*. A propagação auxiliar de um trabalho coberto que
 ocorre apenas como consequência da utilização da transmissão ponto a
 ponto para receber uma cópia também não exige aceitação. No entanto,
 nada além dessa Licença lhe concede permissão para propagar ou modificar
