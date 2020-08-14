@@ -145,18 +145,19 @@ template <class Type> lista<Type> lista<Type>::operator-
 }
 
 template <class Type> inline void lista<Type>::operator=
-				(const lista<Type> seg_lista){
+					(lista<Type> seg_lista){
 	for(unsigned long long i = 0ULL; i < seg_lista.tamanho_lista; i++){
 		if(tamanho_lista <= i)
 			addpos(1ULL);
-		*this[i] = seg_lista[i];
+		(*this)[i] = seg_lista[i];
 	}
 
 	if(tamanho_lista > seg_lista.tamanho_lista)
 		*this -= tamanho_lista - seg_lista.tamanho_lista;
 }
 
-template <class Type> inline void lista<Type>::operator+=(const Type valor){
+template <class Type> inline void lista<Type>::operator+=
+					(const Type valor){
 	/* Vai para o fim da lista */
 	gotox(tamanho_lista - 1ULL);
 
@@ -175,14 +176,14 @@ template <class Type> inline void lista<Type>::operator+=
 }
 
 template <class Type> inline void lista<Type>::operator-=
-				(const unsigned long long quant_pos){
-	for(unsigned long long i = 0ULL; i< quant_pos; i++)
+				(unsigned long long quant_pos){
+	for(; quant_pos > 0ULL; quant_pos--)
 		(*this)--;
 }
 
 template <class Type> inline void lista<Type>::operator--(){
 	/* Verifica se a lista é vazia */
-	if(tamanho_lista ==0ULL){
+	if(tamanho_lista == 0ULL){
 		/* Se for, dá mensagem de erro */
 		fputs(lista_vazia, stderr);
 		return;
@@ -251,11 +252,23 @@ template <class Type> Type& lista<Type>::operator[]
 	return PosicaoAtual -> dado;
 }
 
+template <class Type> inline void lista<Type>::esvazia(){
+	(*this) -= tamanho_lista;
+}
+
+template <class Type> bool lista<Type>::have_elem(Type elem){
+	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
+		if((*this)[i] == elem)
+			return true;
+
+	return false;
+}
+
 template <class Type> unsigned long long lista<Type>::count_elem(Type elem){
 	unsigned long long cont = 0ULL;
 
 	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
-		if(*this[i] == elem)
+		if((*this)[i] == elem)
 			cont++;
 
 	return cont;
@@ -265,7 +278,7 @@ template <class Type> unsigned long long lista<Type>::count_elems
 					(Type *elems, const unsigned tam){
 	unsigned long long cont;
 
-	for(unsigned i=0; i < tam; i++)
+	for(unsigned i = 0U, cont = 0ULL; i < tam; i++)
 		cont += (*this).count_elem(elems[i]);
 
 	return cont;
@@ -287,6 +300,36 @@ string::string(){
 	/* Seta a primeira célula */
 	PosicaoAtual -> dado = '\0';
 	PosicaoAtual -> proximo = PosicaoAtual -> anterior= NULL;
+}
+
+inline void string::esvazia(){
+	(*this) -= tamanho_lista - 1ULL;
+}
+
+void string::word(lista<string> palavras, const char caractere){
+	(*this).esvazia();
+
+	for(unsigned long long i = 0ULL; i < palavras.tamanho_lista; i++){
+		if(i != 0ULL)
+			(*this) += caractere;
+		(*this) += palavras[i];
+	}
+}
+
+lista<string> string::unword(const char caractere){
+	lista<string> resultado;
+	string palavra;
+
+	for(unsigned long long i = 0ULL; (*this)[i]; i++){
+		if((*this)[i] != caractere)
+			palavra += (*this)[i];
+		else{
+			resultado += palavra;
+			palavra -= palavra.tamanho_lista - 1ULL;
+		}
+	}
+
+	return resultado;
 }
 
 string string::operator+(const char caractere){
@@ -322,7 +365,16 @@ string string::operator+(string str){
 	return resultado;
 }
 
-void string::operator+=(const char caractere){
+string string::operator-(unsigned long long quant_pos){
+	string resultado = *this;
+
+	for(; quant_pos > 0ULL; quant_pos--)
+		--resultado;
+
+	return resultado;
+}
+
+inline void string::operator+=(const char caractere){
 	/* Vai para a penúltima célula */
 	gotox(tamanho_lista - 2ULL);
 
@@ -334,14 +386,50 @@ void string::operator+=(const char caractere){
 	PosicaoAtual -> dado = caractere;
 }
 
+void string::operator=(string str){
+	(*this).esvazia();
+	(*this) += str;
+}
+
 void string::operator+=(string str){
 	for(unsigned long long i = 0ULL; str[i]; i++)
 		*this += str[i];
 }
 
 void string::operator-=(unsigned long long quant_pos){
-// TODO: Escrever o operador -=
-#pragma mensage TODO: escrever o operador -=
+	for(; quant_pos > 0ULL; quant_pos--)
+		--(*this);
+}
+
+inline void string::operator--(){
+	/* Verifica se a lista é vazia */
+	if(tamanho_lista == 1ULL){
+		/* Se for, dá mensagem de erro */
+		fputs(lista_vazia, stderr);
+		return;
+	}
+	/* Verifica se é célula única */
+	if(tamanho_lista == 2ULL){
+		/* Libera a única célula */
+		PosicaoAtual = inicio -> proximo;
+		free(inicio);
+		inicio = PosicaoAtual;
+		tamanho_lista = 1ULL;
+		return;
+	}
+
+	/* Vai até a penultima posição */
+	gotox(tamanho_lista - 3ULL);
+
+	/* Libera a última posição */
+	no *no_remover = PosicaoAtual -> proximo;
+	(no_remover -> proximo) -> anterior = no_remover -> anterior;
+	(no_remover -> anterior) -> proximo = no_remover -> proximo;
+	free(no_remover);
+
+	/* Ajusta a célula e o cabeçalho da lista */
+	PosicaoAtual -> proximo = NULL;
+	tamanho_lista--;
 }
 
 void string::operator=(const char* str){
