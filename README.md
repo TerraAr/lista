@@ -38,7 +38,19 @@ Protópipo de classe de lista lincada.
    Desaloca as posições alocadas dinamicamente e destrói as variáveis estáticas.
  - `gotopos(unsigned long long pos)`
    Manda o cursor da lista para a posição especificada.
+ - `addpos(unsigned long long qte_celulas)`
+   Adiciona `qte_celulas` imediatamente após a posição atual.
+ - `rmpos(unsigned long long qte_celulas = 1)`
+   Remove `qte_celulas` da lista a partir da posição atual.
+ - `tam_lista()`
+   Devolve o tamanho da lista.
  - `escreve(Type a)`
    Escreve o valor mandado na posição atual da lista.
  - `Type le()`
    Retorna a posição atual da lista.
+ - `count_elem(Type elem)`
+   Conta a quantidade de vezes que o elemento aparece na lista.
+ - `count_elems(Type *elems)`
+   Conta a quantidade de vezes que os elementos aparecem na lista.
+ - `vetor_para_lista(Type* vetor, const unsigned tam)`
+   Transforma o vetor dado em uma lista lincada.
