@@ -1,4 +1,39 @@
+/* Copyright (C) 2018 - 2020 Fernando José Carames Vecino.
+ ************************************************************************
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ ************************************************************************
+ *
+ * Este programa é um software livre; você pode redistribuí-lo e/ou
+ * modificá-lo sob os termos da Licença Pública Geral GNU como publicada
+ * pela Free Software Foundation; na versão 3 da Licença, ou
+ * (a seu critério) qualquer versão posterior.
+ *
+ * Este programa é distribuído na esperança de que possa ser útil,
+ * mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO
+ * a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a
+ * Licença Pública Geral GNU para mais detalhes.
+ *
+ * Você deve ter recebido uma cópia da Licença Pública Geral GNU junto
+ * com este programa. Se não, veja <http://www.gnu.org/licenses/>
+ ************************************************************************
+ */
+
 #include"lista.h"
+
+#include<stdio.h>
+#include<stdlib.h>
 
 template <class Type> inline void lista<Type>::gotox
 				(const unsigned long long pos){
@@ -47,6 +82,7 @@ template <class Type> void lista<Type>::addpos(unsigned long long a){
 		PosicaoAtual -> anterior = NULL;
 		PosicaoAtual -> proximo = NULL;
 
+		tamanho_lista = 1ULL;
 		a--;
 	}
 
@@ -149,7 +185,8 @@ template <class Type> inline void lista<Type>::operator=
 	for(unsigned long long i = 0ULL; i < seg_lista.tamanho_lista; i++){
 		if(tamanho_lista <= i)
 			addpos(1ULL);
-		(*this)[i] = seg_lista[i];
+		gotox(i);
+		PosicaoAtual -> dado = seg_lista[i];
 	}
 
 	if(tamanho_lista > seg_lista.tamanho_lista)
@@ -164,8 +201,11 @@ template <class Type> inline void lista<Type>::operator+=
 	/* Adiciona mais uma célula */
 	addpos(1ULL);
 
+	/* Vai para a última posição (que é a próxima) */
+	PosicaoAtual = PosicaoAtual -> proximo;
+	posicao++;
+
 	/* Coloca o dado na última célula */
-	gotox(tamanho_lista - 1ULL);
 	PosicaoAtual -> dado = valor;
 }
 
@@ -246,6 +286,10 @@ template <class Type> inline bool lista<Type>::operator<=
 	return tamanho_lista <= cmp.tamanho_lista;
 }
 
+template <class Type> inline bool lista<Type>::eVazia(){
+	return tamanho_lista == 0ULL;
+}
+
 template <class Type> Type& lista<Type>::operator[]
 				(const unsigned long long pos){
 	gotopos(pos);
@@ -299,21 +343,11 @@ string::string(){
 
 	/* Seta a primeira célula */
 	PosicaoAtual -> dado = '\0';
-	PosicaoAtual -> proximo = PosicaoAtual -> anterior= NULL;
+	PosicaoAtual -> proximo = PosicaoAtual -> anterior = NULL;
 }
 
 inline void string::esvazia(){
 	(*this) -= tamanho_lista - 1ULL;
-}
-
-void string::word(lista<string> palavras, const char caractere){
-	(*this).esvazia();
-
-	for(unsigned long long i = 0ULL; i < palavras.tamanho_lista; i++){
-		if(i != 0ULL)
-			(*this) += caractere;
-		(*this) += palavras[i];
-	}
 }
 
 lista<string> string::unword(const char caractere){
@@ -461,4 +495,16 @@ bool string::operator==(const char* str){
 
 bool string::operator!=(const char* str){
 	return !(*this == str);
+}
+
+inline bool string::eVazia(){
+	return tamanho_lista == 1ULL;
+}
+
+string word(lista<string> palavras, const char caractere){
+	string word = palavras[0ULL];
+	for(unsigned long long i = 1ULL; i < palavras.tam_lista(); i++){
+		word += caractere;
+		word += palavras[i];
+	}
 }
