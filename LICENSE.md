@@ -1,11 +1,3 @@
-Copyright (C) 2018 -2020 Fernando José Carames Vecino
-
-Código lançado sob a GPL-3.0-ou-posterior.
-
-Código publicado bajo la GPL-3.0-o-después.
-
-Code released under GPL-3.0-or-later.
-
 ### GNU GENERAL PUBLIC LICENSE
 
 Version 3, 29 June 2007
