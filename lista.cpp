@@ -35,7 +35,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-template <class Type> inline void lista<Type>::gotox
+template <class Type> void lista<Type>::gotox
 				(const unsigned long long pos){
 	/* Se tiver a frente, retorna até a posição */
 	for(; posicao > pos; posicao--)
@@ -103,7 +103,7 @@ template <class Type> void lista<Type>::addpos(unsigned long long a){
 	}
 }
 
-template <class Type> inline void lista<Type>::rmpos
+template <class Type> void lista<Type>::rmpos
 			(unsigned long long qte_celulas){
 	for(; qte_celulas > 0ULL; qte_celulas--){
 		/* Verifica a lista é não-vazia */
@@ -148,7 +148,7 @@ template <class Type> inline void lista<Type>::rmpos
 	}
 }
 
-template <class Type> inline unsigned long long lista<Type>::tam_lista(){
+template <class Type> unsigned long long lista<Type>::tam_lista(){
 	return tamanho_lista;
 }
 
@@ -180,7 +180,7 @@ template <class Type> lista<Type> lista<Type>::operator-
 	return lista_menos;
 }
 
-template <class Type> inline void lista<Type>::operator=
+template <class Type> void lista<Type>::operator=
 					(lista<Type> seg_lista){
 	for(unsigned long long i = 0ULL; i < seg_lista.tamanho_lista; i++){
 		if(tamanho_lista <= i)
@@ -193,7 +193,7 @@ template <class Type> inline void lista<Type>::operator=
 		*this -= tamanho_lista - seg_lista.tamanho_lista;
 }
 
-template <class Type> inline void lista<Type>::operator+=
+template <class Type> void lista<Type>::operator+=
 					(const Type valor){
 	/* Vai para o fim da lista */
 	gotox(tamanho_lista - 1ULL);
@@ -209,19 +209,19 @@ template <class Type> inline void lista<Type>::operator+=
 	PosicaoAtual -> dado = valor;
 }
 
-template <class Type> inline void lista<Type>::operator+=
+template <class Type> void lista<Type>::operator+=
 				(const lista<Type> seg_lista){
 	for(unsigned long long i = 0ULL; i < seg_lista.tamanho_lista; i++)
 		*this += seg_lista[i];
 }
 
-template <class Type> inline void lista<Type>::operator-=
+template <class Type> void lista<Type>::operator-=
 				(unsigned long long quant_pos){
 	for(; quant_pos > 0ULL; quant_pos--)
 		(*this)--;
 }
 
-template <class Type> inline void lista<Type>::operator--(){
+template <class Type> void lista<Type>::operator--(){
 	/* Verifica se a lista é vazia */
 	if(tamanho_lista == 0ULL){
 		/* Se for, dá mensagem de erro */
@@ -248,7 +248,7 @@ template <class Type> inline void lista<Type>::operator--(){
 	tamanho_lista--;
 }
 
-template <class Type> inline bool lista<Type>::operator==
+template <class Type> bool lista<Type>::operator==
 				(lista<Type> cmp){
 	/* Verifica se as duas listas tem o mesmo tamanho */
 	if(tamanho_lista != cmp.tamanho_lista)
@@ -256,37 +256,37 @@ template <class Type> inline bool lista<Type>::operator==
 
 	/* Se tiverem, verifica a igualdade célula a célula */
 	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
-		if(*this[i] != cmp[i])
+		if((*this)[i] != cmp[i])
 			return false;
 
 	/* Se não tiver nenhuma diferença, é igual */
 	return true;
 }
 
-template <class Type> inline bool lista<Type>::operator!=
+template <class Type> bool lista<Type>::operator!=
 				(const lista<Type> cmp){
 	return !(*this == cmp);
 }
 
-template <class Type> inline bool lista<Type>::operator>(const lista<Type> cmp){
+template <class Type> bool lista<Type>::operator>(const lista<Type> cmp){
 	return tamanho_lista > cmp.tamanho_lista;
 }
 
-template <class Type> inline bool lista<Type>::operator<(const lista<Type> cmp){
+template <class Type> bool lista<Type>::operator<(const lista<Type> cmp){
 	return tamanho_lista < cmp.tamanho_lista;
 }
 
-template <class Type> inline bool lista<Type>::operator>=
+template <class Type> bool lista<Type>::operator>=
 				(const lista<Type> cmp){
 	return tamanho_lista >= cmp.tamanho_lista;
 }
 
-template <class Type> inline bool lista<Type>::operator<=
+template <class Type> bool lista<Type>::operator<=
 				(const lista<Type> cmp){
 	return tamanho_lista <= cmp.tamanho_lista;
 }
 
-template <class Type> inline bool lista<Type>::eVazia(){
+template <class Type> bool lista<Type>::eVazia(){
 	return tamanho_lista == 0ULL;
 }
 
@@ -296,7 +296,7 @@ template <class Type> Type& lista<Type>::operator[]
 	return PosicaoAtual -> dado;
 }
 
-template <class Type> inline void lista<Type>::esvazia(){
+template <class Type> void lista<Type>::esvazia(){
 	(*this) -= tamanho_lista;
 }
 
@@ -346,7 +346,7 @@ string::string(){
 	PosicaoAtual -> proximo = PosicaoAtual -> anterior = NULL;
 }
 
-inline void string::esvazia(){
+void string::esvazia(){
 	(*this) -= tamanho_lista - 1ULL;
 }
 
@@ -408,7 +408,7 @@ string string::operator-(unsigned long long quant_pos){
 	return resultado;
 }
 
-inline void string::operator+=(const char caractere){
+void string::operator+=(const char caractere){
 	/* Vai para a penúltima célula */
 	gotox(tamanho_lista - 2ULL);
 
@@ -435,7 +435,7 @@ void string::operator-=(unsigned long long quant_pos){
 		--(*this);
 }
 
-inline void string::operator--(){
+void string::operator--(){
 	/* Verifica se a lista é vazia */
 	if(tamanho_lista == 1ULL){
 		/* Se for, dá mensagem de erro */
@@ -486,36 +486,36 @@ void string::operator+=(const char* str){
 		*this += str[i];
 }
 
-inline bool string::operator==(string cmp){
+bool string::operator==(string cmp){
 	/* Verifica se as duas listas tem o mesmo tamanho */
 	if(tamanho_lista != cmp.tamanho_lista)
 		return false;
 
 	/* Se tiverem, verifica a igualdade célula a célula */
 	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
-		if(*this[i] != cmp[i])
+		if((*this)[i] != cmp[i])
 			return false;
 
 	/* Se não tiver nenhuma diferença, é igual */
 	return true;
 }
 
-inline bool string::operator!=(string cmp){
+bool string::operator!=(string cmp){
 	return !(*this == cmp);
 }
 
-inline bool string::operator==(const char* str){
+bool string::operator==(const char* str){
 	for(unsigned long long i = 0ULL; str[i] || (*this)[i]; i++)
 		if((*this)[i] != str[i])
 			return false;
 	return true;
 }
 
-inline bool string::operator!=(const char* str){
+bool string::operator!=(const char* str){
 	return !(*this == str);
 }
 
-inline bool string::eVazia(){
+bool string::eVazia(){
 	return tamanho_lista == 1ULL;
 }
 

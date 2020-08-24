@@ -49,68 +49,51 @@ private:
 	no *inicio, *PosicaoAtual;
 	unsigned long long posicao, tamanho_lista;
 
-	inline void gotox(const unsigned long long pos)
-			__attribute__((always_inline));
+	inline void gotox(const unsigned long long pos);
 
 public:
 	lista();
 	~lista();
 
-	inline void gotopos(const unsigned long long pos)
-			__attribute__((always_inline));
+	void gotopos(const unsigned long long pos);
 
 	/* Adiciona as células logo após a célula atual */
 	void addpos(unsigned long long qte_celulas);
 	void rmpos(unsigned long long qte_celulas = 1ULL);
 
 	/* Retorna o tamanho da lista */
-	inline unsigned long long tam_lista()
-			__attribute__((always_inline));
+	unsigned long long tam_lista();
 
 	/* Escreve o dado na posição atual da lista */
-	void escreve(Type a) __attribute__((always_inline));
+	void escreve(Type a);
 
 	/* Lê o dado na posição atual da lista */
-	inline Type le() __attribute__((always_inline));
+	Type le();
 
 	lista<Type> operator+(const Type valor);
 	lista<Type> operator+(const lista<Type> seg_lista);
 	lista<Type> operator-(const unsigned long long quant_pos);
 
 	inline void operator+=(const Type valor)
-			__attribute__((always_inline));
 
-	inline void operator=(lista<Type>)
-			__attribute__((always_inline));
-	inline void operator+=(lista<Type> seg_lista)
-			__attribute__((always_inline));
-	inline void operator-=
-			(unsigned long long quant_pos)
-			__attribute__((always_inline));
+	void operator=(lista<Type>);
+	void operator+=(lista<Type> seg_lista);
+	void operator-=(unsigned long long quant_pos);
 
-	inline void operator--()
-		__attribute__((always_inline));
+	void operator--();
 
-	inline bool operator==(lista<Type>)
-			__attribute__((always_inline));
-	inline bool operator!=(const lista<Type>)
-			__attribute__((always_inline));
+	bool operator==(lista<Type>);
+	bool operator!=(const lista<Type>);
 
-	inline bool operator>(const lista<Type>)
-			__attribute__((always_inline));
-	inline bool operator<(const lista<Type>)
-			__attribute__((always_inline));
-	inline bool operator>=(const lista<Type>)
-			__attribute__((always_inline));
-	inline bool operator<=(const lista<Type>)
-			__attribute__((always_inline));
-	inline bool eVazia()
-		__attribute__((always_inline));
+	bool operator>(const lista<Type>);
+	bool operator<(const lista<Type>);
+	bool operator>=(const lista<Type>);
+	bool operator<=(const lista<Type>);
+	bool eVazia();
 
 	Type& operator[](const unsigned long long);
 
-	inline void esvazia()
-		__attribute__((always_inline));
+	void esvazia();
 
 	bool have_elem(Type elem);
 
@@ -128,8 +111,7 @@ class string: public lista<char>{
 public:
 	string();
 
-	inline void esvazia()
-		__attribute__((always_inline));
+	void esvazia();
 
 	lista<string> unword(const char);
 
@@ -140,27 +122,24 @@ public:
 
 	/* Operador para adicionar um caractere no final da string.
 	 * É usado como base para as demais funções */
-	inline void operator+=(const char)
-			__attribute__((always_inline));
+	void operator+=(const char);
 
 	void operator=(string);
 	void operator+=(string);
 	void operator-=(unsigned long long);
 
-	inline void operator--()
-			__attribute__((always_inline));
+	void operator--();
 
 	void operator=(const char*);
 	void operator+=(const char*);
 
-	inline bool operator==(string);
-	inline bool operator!=(string);
+	bool operator==(string);
+	bool operator!=(string);
 
-	inline bool operator==(const char*);
-	inline bool operator!=(const char*);
+	bool operator==(const char* str);
+	bool operator!=(const char* str);
 
-	inline bool eVazia()
-		__attribute__((always_inline));
+	bool eVazia();
 };
 
 string word(lista<string>, const char);
