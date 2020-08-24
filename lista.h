@@ -74,7 +74,7 @@ public:
 	lista<Type> operator+(const lista<Type> seg_lista);
 	lista<Type> operator-(const unsigned long long quant_pos);
 
-	inline void operator+=(const Type valor)
+	inline void operator+=(const Type valor);
 
 	void operator=(lista<Type>);
 	void operator+=(lista<Type> seg_lista);
