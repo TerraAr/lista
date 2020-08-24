@@ -249,7 +249,7 @@ template <class Type> inline void lista<Type>::operator--(){
 }
 
 template <class Type> inline bool lista<Type>::operator==
-				(const lista<Type> cmp){
+				(lista<Type> cmp){
 	/* Verifica se as duas listas tem o mesmo tamanho */
 	if(tamanho_lista != cmp.tamanho_lista)
 		return false;
@@ -486,14 +486,32 @@ void string::operator+=(const char* str){
 		*this += str[i];
 }
 
-bool string::operator==(const char* str){
+inline bool string::operator==(string cmp){
+	/* Verifica se as duas listas tem o mesmo tamanho */
+	if(tamanho_lista != cmp.tamanho_lista)
+		return false;
+
+	/* Se tiverem, verifica a igualdade célula a célula */
+	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
+		if(*this[i] != cmp[i])
+			return false;
+
+	/* Se não tiver nenhuma diferença, é igual */
+	return true;
+}
+
+inline bool string::operator!=(string cmp){
+	return !(*this == cmp);
+}
+
+inline bool string::operator==(const char* str){
 	for(unsigned long long i = 0ULL; str[i] || (*this)[i]; i++)
 		if((*this)[i] != str[i])
 			return false;
 	return true;
 }
 
-bool string::operator!=(const char* str){
+inline bool string::operator!=(const char* str){
 	return !(*this == str);
 }
 

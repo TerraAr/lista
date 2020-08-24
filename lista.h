@@ -80,7 +80,7 @@ public:
 	inline void operator+=(const Type valor)
 			__attribute__((always_inline));
 
-	inline void operator=(const lista<Type>)
+	inline void operator=(lista<Type>)
 			__attribute__((always_inline));
 	inline void operator+=(lista<Type> seg_lista)
 			__attribute__((always_inline));
@@ -91,7 +91,7 @@ public:
 	inline void operator--()
 		__attribute__((always_inline));
 
-	inline bool operator==(const lista<Type>)
+	inline bool operator==(lista<Type>)
 			__attribute__((always_inline));
 	inline bool operator!=(const lista<Type>)
 			__attribute__((always_inline));
@@ -153,8 +153,11 @@ public:
 	void operator=(const char*);
 	void operator+=(const char*);
 
-	bool operator==(const char*);
-	bool operator!=(const char*);
+	inline bool operator==(string);
+	inline bool operator!=(string);
+
+	inline bool operator==(const char*);
+	inline bool operator!=(const char*);
 
 	inline bool eVazia()
 		__attribute__((always_inline));
