@@ -67,6 +67,12 @@ consequente "perda" de memória.
    Escreve o valor recebido na posição atual da lista.
  - `Type le()`
    Retorna o valor armazenado na posição atual da lista.
+ - `eVazia()`
+   Verifica se a lista é vazia.
+ - `esvazia()`
+   Esvazia a lista lincada.
+ - `have_elem(Type elem)`
+   Verifica se há o elemento na lista.
  - `count_elem(Type elem)`
    Conta a quantidade de vezes que o elemento aparece na lista.
  - `count_elems(Type *elems)`
@@ -79,3 +85,12 @@ consequente "perda" de memória.
 A string é uma classe filha da classe `lista<char>`, sendo estendida de
 forma a operar também com variáveis e constantes do tipo vetor de `char`,
 além de fazer as adaptações necessárias por conta do `'\0'` em seu fim.
+
+### Funções específicas
+
+ - `word(lista<string>, const char)`
+   Forma uma string com as palavras da lista usando o caractere como
+   conector.
+ - `unword(cons char)`
+   Quebra a string nos pontos onde o caractere aparece, formando uma
+   lista de palavras.
