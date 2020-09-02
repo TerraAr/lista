@@ -53,6 +53,7 @@ private:
 
 public:
 	lista();
+	lista(const lista&);
 	~lista();
 
 	void gotopos(const unsigned long long pos);
@@ -106,12 +107,15 @@ public:
 template <class Type> lista<Type> vetor_para_lista
 			(Type* vetor, const unsigned tam);
 
-class string: public lista<char>{
+class string: public lista<char> {
 
 public:
 	string();
+	string(const string&);
+	string(const char*);
 
-	void esvazia();
+	/* Retorna o tamanho da lista */
+	unsigned long long tam_lista();
 
 	lista<string> unword(const char);
 
@@ -140,6 +144,8 @@ public:
 	bool operator!=(const char* str);
 
 	bool eVazia();
+
+	void esvazia();
 };
 
 string word(lista<string>, const char);

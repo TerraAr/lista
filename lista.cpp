@@ -34,6 +34,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 template <class Type> void lista<Type>::gotox
 				(const unsigned long long pos){
@@ -51,11 +52,23 @@ template <class Type> lista<Type>::lista(){
 	posicao = tamanho_lista = 0ULL;
 }
 
+template <class Type> lista<Type>::lista(const lista<Type>& list){
+	PosicaoAtual = inicio = NULL;
+	posicao = tamanho_lista = 0ULL;
+
+	{no* aux = list.inicio;
+	for(unsigned long long i = 0ULL; i < list.tamanho_lista; i++){
+		*this += aux -> dado;
+		aux = aux -> proximo;
+	}}
+}
+
 template <class Type> lista<Type>::~lista(){
-	while(tamanho_lista > 0ULL){
-		gotox(--tamanho_lista);
-		free(PosicaoAtual);
+	for(; tamanho_lista > 1ULL; tamanho_lista--){
+		gotox(tamanho_lista - 2ULL);
+		free(PosicaoAtual -> proximo);
 	}
+	free(inicio);
 }
 
 template <class Type> void lista<Type>::gotopos(const unsigned long long pos){
@@ -78,7 +91,9 @@ template <class Type> void lista<Type>::gotopos(const unsigned long long pos){
 template <class Type> void lista<Type>::addpos(unsigned long long a){
 	/* Se a lista está vazia, cria o primeiro nó */
 	if(tamanho_lista == 0ULL){
-		PosicaoAtual = inicio = (no*)malloc(sizeof(no));
+		do{
+			PosicaoAtual = inicio = (no*)malloc(sizeof(no));
+		}while(inicio == NULL);
 		PosicaoAtual -> anterior = NULL;
 		PosicaoAtual -> proximo = NULL;
 
@@ -87,8 +102,11 @@ template <class Type> void lista<Type>::addpos(unsigned long long a){
 	}
 
 	/* Cria os nós logo depois da posição atual */
-	for(; a > 0ULL; tamanho_lista++, a--){
-		no *aux = (no*) malloc(sizeof(no));
+	for(; a > 0ULL; a--){
+		no *aux;
+		do{
+			aux = (no*) malloc(sizeof(no));
+		}while(aux == NULL);
 
 		/* Trava o nó auxiliar neste */
 		aux -> anterior = PosicaoAtual;
@@ -100,6 +118,9 @@ template <class Type> void lista<Type>::addpos(unsigned long long a){
 			(PosicaoAtual -> proximo) -> anterior = aux;
 		/* Trava este nó no auxiliar */
 		PosicaoAtual -> proximo = aux;
+
+		/* Incrementa o tamanho da lista */
+		tamanho_lista++;
 	}
 }
 
@@ -195,15 +216,16 @@ template <class Type> void lista<Type>::operator=
 
 template <class Type> void lista<Type>::operator+=
 					(const Type valor){
-	/* Vai para o fim da lista */
-	gotox(tamanho_lista - 1ULL);
+	/* Se não é vazia, vai para o fim da lista */
+	if(tamanho_lista != 0ULL){
+		gotox(tamanho_lista - 1ULL);
+	}
 
 	/* Adiciona mais uma célula */
 	addpos(1ULL);
 
-	/* Vai para a última posição (que é a próxima) */
-	PosicaoAtual = PosicaoAtual -> proximo;
-	posicao++;
+	/* Vai para a última posição */
+	gotox(tamanho_lista - 1ULL);
 
 	/* Coloca o dado na última célula */
 	PosicaoAtual -> dado = valor;
@@ -337,7 +359,10 @@ template <class Type> lista<Type> vetor_para_lista
 }
 
 string::string(){
-	PosicaoAtual = inicio = (no*)malloc(sizeof(char));
+	do{
+		PosicaoAtual = inicio = (no*)malloc(sizeof(no));
+	}while(inicio == NULL);
+
 	posicao = 0ULL;
 	tamanho_lista = 1ULL;
 
@@ -346,8 +371,31 @@ string::string(){
 	PosicaoAtual -> proximo = PosicaoAtual -> anterior = NULL;
 }
 
-void string::esvazia(){
-	(*this) -= tamanho_lista - 1ULL;
+string::string(const string& str){
+	PosicaoAtual = inicio = NULL;
+	posicao = tamanho_lista = 0ULL;
+
+	addpos(str.tamanho_lista);
+
+	{no* aux = str.inicio;
+	for(unsigned long long i = 0ULL; i < tamanho_lista; i++){
+		(*this)[i] = aux -> dado;
+		aux = aux -> proximo;
+	}}
+}
+
+string::string(const char* str){
+	PosicaoAtual = inicio = NULL;
+	posicao = tamanho_lista = 0ULL;
+
+	addpos(strlen(str) + 1ULL);
+
+	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
+		(*this)[i] = *(str + i);
+}
+
+unsigned long long string::tam_lista(){
+	return tamanho_lista;
 }
 
 lista<string> string::unword(const char caractere){
@@ -369,14 +417,7 @@ lista<string> string::unword(const char caractere){
 string string::operator+(const char caractere){
 	string resultado = *this;
 
-	/* Vai para a penúltima célula */
-	resultado.gotox(tamanho_lista - 2ULL);
-
-	/* Adiciona uma célula antes do '\0' */
-	resultado.addpos(1ULL);
-
-	/* Agora a string resultado tem tamanho tamanho_lista+1 */
-	resultado[tamanho_lista - 1ULL] = caractere;
+	resultado += caractere;
 
 	return resultado;
 }
@@ -402,22 +443,45 @@ string string::operator+(string str){
 string string::operator-(unsigned long long quant_pos){
 	string resultado = *this;
 
-	for(; quant_pos > 0ULL; quant_pos--)
-		--resultado;
+	resultado -= quant_pos;
 
 	return resultado;
 }
 
 void string::operator+=(const char caractere){
-	/* Vai para a penúltima célula */
-	gotox(tamanho_lista - 2ULL);
+	if(tamanho_lista == 1ULL){
+		no* aux;
 
-	/* Adiciona uma célula antes do '\0' */
-	addpos(1ULL);
+		/* Garante que vai alocar a célula */
+		do{
+			aux = (no*) malloc(sizeof(no));
+		}while(aux == NULL);
 
-	/* Colocando o caractere antes do '\0' */
-	gotox(tamanho_lista - 2ULL);
-	PosicaoAtual -> dado = caractere;
+		/* Trava o nó */
+		aux -> anterior = NULL;
+		aux -> proximo = inicio;
+		inicio -> anterior = aux;
+		inicio = aux;
+
+		/* Incrementa o tamanho da lista */
+		tamanho_lista++;
+
+		/* Recolocando o marcador de posição na 1ª posição */
+		PosicaoAtual = inicio;
+
+		/* Carrega o caractere */
+		inicio -> dado = caractere;
+	}else{
+		/* Vai para a última célula */
+		gotox(tamanho_lista - 2ULL);
+
+		/* Adiciona uma célula antes do '\0' */
+		addpos(1ULL);
+
+		/* Colocando o caractere antes do '\0' */
+		gotox(tamanho_lista - 2ULL);
+		PosicaoAtual -> dado = caractere;
+	}
 }
 
 void string::operator=(string str){
@@ -452,33 +516,22 @@ void string::operator--(){
 		return;
 	}
 
-	/* Vai até a penultima posição */
+	/* Vai até o penúltimo caractere */
 	gotox(tamanho_lista - 3ULL);
 
 	/* Libera a última posição */
 	no *no_remover = PosicaoAtual -> proximo;
-	(no_remover -> proximo) -> anterior = no_remover -> anterior;
-	(no_remover -> anterior) -> proximo = no_remover -> proximo;
+	(no_remover -> proximo) -> anterior = PosicaoAtual;
+	PosicaoAtual -> proximo = no_remover -> proximo;
 	free(no_remover);
 
-	/* Ajusta a célula e o cabeçalho da lista */
-	PosicaoAtual -> proximo = NULL;
+	/* Decrementa o tamanho da lista */
 	tamanho_lista--;
 }
 
 void string::operator=(const char* str){
-	/* Copia até acabar as posições de um deles */
-	unsigned long long i;
-	for(i = 0ULL; str[i] && (*this)[i]; i++)
-		(*this)[i] = str[i];
-
-	/* Se a string acabou e o vetor char não, continua a cópia */
-	if(str[i])
-		*this += str + i;
-
-	/* Se o vetor char acabou e a string não, destruir até o '\0' */
-	if(str[i])
-		*this -= tamanho_lista - i - 1ULL;
+	(*this).esvazia();
+	*this += str;
 }
 
 void string::operator+=(const char* str){
@@ -515,6 +568,10 @@ bool string::operator!=(const char* str){
 	return !(*this == str);
 }
 
+void string::esvazia(){
+	(*this) -= tamanho_lista - 1ULL;
+}
+
 bool string::eVazia(){
 	return tamanho_lista == 1ULL;
 }
@@ -526,3 +583,4 @@ string word(lista<string> palavras, const char caractere){
 		word += palavras[i];
 	}
 }
+
