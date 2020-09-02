@@ -56,6 +56,8 @@ template <class Type> lista<Type>::lista(const lista<Type>& list){
 	PosicaoAtual = inicio = NULL;
 	posicao = tamanho_lista = 0ULL;
 
+	/* Ponteiro auxiliar para percorrer a lista do início ao
+	 * fim sem precisar modificar as variáveis de controle */
 	{no* aux = list.inicio;
 	for(unsigned long long i = 0ULL; i < list.tamanho_lista; i++){
 		*this += aux -> dado;
@@ -203,12 +205,16 @@ template <class Type> lista<Type> lista<Type>::operator-
 
 template <class Type> void lista<Type>::operator=
 					(lista<Type> seg_lista){
+	/* Ponteiro auxiliar para percorrer a lista do início ao
+	 * fim sem precisar modificar as variáveis de controle */
+	{no *aux = seg_lista.inicio;
 	for(unsigned long long i = 0ULL; i < seg_lista.tamanho_lista; i++){
 		if(tamanho_lista <= i)
 			addpos(1ULL);
 		gotox(i);
-		PosicaoAtual -> dado = seg_lista[i];
-	}
+		PosicaoAtual -> dado = aux -> dado;
+		aux = aux -> proximo;
+	}}
 
 	if(tamanho_lista > seg_lista.tamanho_lista)
 		*this -= tamanho_lista - seg_lista.tamanho_lista;
@@ -233,8 +239,13 @@ template <class Type> void lista<Type>::operator+=
 
 template <class Type> void lista<Type>::operator+=
 				(const lista<Type> seg_lista){
-	for(unsigned long long i = 0ULL; i < seg_lista.tamanho_lista; i++)
-		*this += seg_lista[i];
+	/* Ponteiro auxiliar para percorrer a lista do início ao
+	 * fim sem precisar modificar as variáveis de controle */
+	{no *aux = seg_lista.inicio;
+	for(unsigned long long i = 0ULL; i < seg_lista.tamanho_lista; i++){
+		*this += aux -> dado;
+		aux = aux -> proximo;
+	}}
 }
 
 template <class Type> void lista<Type>::operator-=
@@ -271,15 +282,18 @@ template <class Type> void lista<Type>::operator--(){
 }
 
 template <class Type> bool lista<Type>::operator==
-				(lista<Type> cmp){
+				(const lista<Type> cmp){
 	/* Verifica se as duas listas tem o mesmo tamanho */
 	if(tamanho_lista != cmp.tamanho_lista)
 		return false;
 
 	/* Se tiverem, verifica a igualdade célula a célula */
-	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
-		if((*this)[i] != cmp[i])
+	{no *aux = cmp.inicio;
+	for(unsigned long long i = 0ULL; i < tamanho_lista; i++){
+		if((*this)[i] != aux -> dado)
 			return false;
+		aux = aux -> proximo;
+	}}
 
 	/* Se não tiver nenhuma diferença, é igual */
 	return true;
@@ -362,7 +376,6 @@ string::string(){
 	do{
 		PosicaoAtual = inicio = (no*)malloc(sizeof(no));
 	}while(inicio == NULL);
-
 	posicao = 0ULL;
 	tamanho_lista = 1ULL;
 
@@ -377,6 +390,8 @@ string::string(const string& str){
 
 	addpos(str.tamanho_lista);
 
+	/* Ponteiro auxiliar para percorrer a lista do início ao
+	 * fim sem precisar modificar as variáveis de controle */
 	{no* aux = str.inicio;
 	for(unsigned long long i = 0ULL; i < tamanho_lista; i++){
 		(*this)[i] = aux -> dado;
@@ -431,16 +446,23 @@ string string::operator+(const char *str){
 	return resultado;
 }
 
-string string::operator+(string str){
+string string::operator+(const string str){
 	string resultado = *this;
 
-	for(unsigned long long i = 0ULL; str[i]; i++)
-		resultado += str[i];
+	/* Ponteiro auxiliar para percorrer a lista do início ao
+	 * fim sem precisar modificar as variáveis de controle */
+	{no *aux = str.inicio;
+	for(unsigned long long i = 0ULL; aux -> dado; i++){
+		/* Adiciona o dado da célula na lista */
+		resultado += aux -> dado;
+		/* Vai para a próxima célula */
+		aux = aux -> proximo;
+	}}
 
 	return resultado;
 }
 
-string string::operator-(unsigned long long quant_pos){
+string string::operator-(const unsigned long long quant_pos){
 	string resultado = *this;
 
 	resultado -= quant_pos;
@@ -484,14 +506,22 @@ void string::operator+=(const char caractere){
 	}
 }
 
-void string::operator=(string str){
+void string::operator=(const string str){
 	(*this).esvazia();
 	(*this) += str;
 }
 
-void string::operator+=(string str){
-	for(unsigned long long i = 0ULL; str[i]; i++)
-		*this += str[i];
+void string::operator+=(const string str){
+	/* Ponteiro auxiliar para percorrer a lista do
+	 * início ao fim sem precisar modificar as
+	 * variáveis de controle */
+	{no *aux = str.inicio;
+	for(unsigned long long i = 0ULL; aux -> dado; i++){
+		/* Adiciona o dado da célula na lista */
+		*this += aux -> dado;
+		/* Vai para a próxima célula */
+		aux = aux -> proximo;
+	}}
 }
 
 void string::operator-=(unsigned long long quant_pos){
@@ -539,21 +569,24 @@ void string::operator+=(const char* str){
 		*this += str[i];
 }
 
-bool string::operator==(string cmp){
+bool string::operator==(const string cmp){
 	/* Verifica se as duas listas tem o mesmo tamanho */
 	if(tamanho_lista != cmp.tamanho_lista)
 		return false;
 
 	/* Se tiverem, verifica a igualdade célula a célula */
-	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
-		if((*this)[i] != cmp[i])
+	{no *aux = cmp.inicio;
+	for(unsigned long long i = 0ULL; i < tamanho_lista; i++){
+		if((*this)[i] != aux -> dado)
 			return false;
+		aux = aux-> proximo;
+	}}
 
 	/* Se não tiver nenhuma diferença, é igual */
 	return true;
 }
 
-bool string::operator!=(string cmp){
+bool string::operator!=(const string cmp){
 	return !(*this == cmp);
 }
 

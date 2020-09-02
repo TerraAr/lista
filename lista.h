@@ -83,7 +83,7 @@ public:
 
 	void operator--();
 
-	bool operator==(lista<Type>);
+	bool operator==(const lista<Type>);
 	bool operator!=(const lista<Type>);
 
 	bool operator>(const lista<Type>);
@@ -121,15 +121,15 @@ public:
 
 	string operator+(const char);
 	string operator+(const char*);
-	string operator+(string);
-	string operator-(unsigned long long);
+	string operator+(const string);
+	string operator-(const unsigned long long);
 
 	/* Operador para adicionar um caractere no final da string.
 	 * É usado como base para as demais funções */
 	void operator+=(const char);
 
-	void operator=(string);
-	void operator+=(string);
+	void operator=(const string);
+	void operator+=(const string);
 	void operator-=(unsigned long long);
 
 	void operator--();
@@ -137,8 +137,8 @@ public:
 	void operator=(const char*);
 	void operator+=(const char*);
 
-	bool operator==(string);
-	bool operator!=(string);
+	bool operator==(const string);
+	bool operator!=(const string);
 
 	bool operator==(const char* str);
 	bool operator!=(const char* str);
