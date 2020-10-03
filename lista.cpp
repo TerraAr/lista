@@ -39,13 +39,23 @@
 
 template <class Type> void lista<Type>::gotox
 				(const unsigned long long pos){
-	/* Se tiver a frente, retorna até a posição */
-	for(; posicao > pos; posicao--)
-		PosicaoAtual = PosicaoAtual -> anterior;
-
-	/* Se tiver atrás, vai até a posição */
+	/* Se tiver para trás na lista, vai até a posição */
 	for(; posicao < pos; posicao++)
 		PosicaoAtual = PosicaoAtual -> proximo;
+
+	/* Se tiver mais pra frente na lista, verifica se a
+	 * posição pedida é mais perto do início ou da posição
+	 * atual */
+	if(pos < posicao - pos){
+		posicao = 0ULL;
+		PosicaoAtual = inicio;
+
+		for(; posicao < pos; posicao++)
+			PosicaoAtual = PosicaoAtual -> proximo;
+
+	}else
+		for(; posicao > pos; posicao--)
+			PosicaoAtual = PosicaoAtual -> anterior;
 }
 
 template <class Type> lista<Type>::lista(){
@@ -80,18 +90,36 @@ template <class Type> void lista<Type>::gotopos(const unsigned long long pos){
 		return (void)1;
 	}
 
-	/* Se tiver a frente, retorna até a posição */
-	for(; posicao > pos; posicao--)
-		PosicaoAtual = PosicaoAtual -> anterior;
-
 	/* Se tiver atrás, vai até a posição */
 	for(; posicao < pos; posicao++)
 		PosicaoAtual = PosicaoAtual -> proximo;
 
+	/* Se tiver mais pra frente na lista, verifica se a
+	 * posição pedida é mais perto do início ou da posição
+	 * atual */
+	if(pos < posicao - pos){
+		posicao = 0ULL;
+		PosicaoAtual = inicio;
+
+		for(; posicao < pos; posicao++)
+			PosicaoAtual = PosicaoAtual -> proximo;
+
+	}else
+		for(; posicao > pos; posicao--)
+			PosicaoAtual = PosicaoAtual -> anterior;
+
 	return (void)0;
 }
 
-template <class Type> void lista<Type>::addpos(unsigned long long a){
+template <class Type> void lista<Type>::addpos
+			(const unsigned long long celulas_a_adicionar){
+	/* Verifica se deve-se adicionar células */
+	if(celulas_a_adicionar == 0ULL)
+		return;
+
+	/* Contador de células criadas */
+	unsigned long long celulas_criadas = 0ULL;
+
 	/* Se a lista está vazia, cria o primeiro nó */
 	if(tamanho_lista == 0ULL){
 		do{
@@ -101,11 +129,11 @@ template <class Type> void lista<Type>::addpos(unsigned long long a){
 		PosicaoAtual -> proximo = NULL;
 
 		tamanho_lista = 1ULL;
-		a--;
+		celulas_criadas++;
 	}
 
 	/* Cria os nós logo depois da posição atual */
-	for(; a > 0ULL; a--){
+	for(; celulas_criadas < celulas_a_adicionar; celulas_criadas++){
 		no *aux;
 		do{
 			aux = (no*) malloc(sizeof(no));
@@ -128,13 +156,15 @@ template <class Type> void lista<Type>::addpos(unsigned long long a){
 }
 
 template <class Type> void lista<Type>::rmpos
-			(unsigned long long qte_celulas){
-	for(; qte_celulas > 0ULL; qte_celulas--){
-		/* Verifica a lista é não-vazia */
-		if(tamanho_lista == 0ULL){
-			fputs(lista_vazia, stderr);
-			return;
-		}
+			(const unsigned long long celulas_a_remover){
+	/* Verifica se a lista possui células suficientes a serem
+	 * removidas */
+	if(celulas_a_remover > tamanho_lista){
+		fputs(remover_mais, stderr);
+		return;
+	}
+
+	for(unsigned long long i = 0ULL; i < celulas_a_remover; i++){
 
 		/* Verifica se é a última posição */
 		if(PosicaoAtual -> proximo != NULL){	// Se não é
@@ -176,7 +206,7 @@ template <class Type> unsigned long long lista<Type>::tam_lista(){
 	return tamanho_lista;
 }
 
-template <class Type> void lista<Type>::escreve(Type a){
+template <class Type> void lista<Type>::escreve(const Type a){
 	PosicaoAtual -> dado = a;
 }
 
@@ -205,7 +235,7 @@ template <class Type> lista<Type> lista<Type>::operator-
 }
 
 template <class Type> void lista<Type>::operator=
-					(lista<Type> seg_lista){
+					(const lista<Type> seg_lista){
 	/* Ponteiro auxiliar para percorrer a lista do início ao
 	 * fim sem precisar modificar as variáveis de controle */
 	{no *aux = seg_lista.inicio;
@@ -250,8 +280,8 @@ template <class Type> void lista<Type>::operator+=
 }
 
 template <class Type> void lista<Type>::operator-=
-				(unsigned long long quant_pos){
-	for(; quant_pos > 0ULL; quant_pos--)
+				(const unsigned long long quant_pos){
+	for(unsigned long long i = 0ULL; i < quant_pos; i++)
 		(*this)--;
 }
 
@@ -337,7 +367,7 @@ template <class Type> void lista<Type>::esvazia(){
 	(*this) -= tamanho_lista;
 }
 
-template <class Type> bool lista<Type>::have_elem(Type elem){
+template <class Type> bool lista<Type>::have_elem(const Type elem){
 	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
 		if((*this)[i] == elem)
 			return true;
@@ -345,7 +375,8 @@ template <class Type> bool lista<Type>::have_elem(Type elem){
 	return false;
 }
 
-template <class Type> unsigned long long lista<Type>::count_elem(Type elem){
+template <class Type> unsigned long long lista<Type>::count_elem
+				(const Type elem){
 	unsigned long long cont = 0ULL;
 
 	for(unsigned long long i = 0ULL; i < tamanho_lista; i++)
@@ -356,7 +387,7 @@ template <class Type> unsigned long long lista<Type>::count_elem(Type elem){
 }
 
 template <class Type> unsigned long long lista<Type>::count_elems
-					(Type *elems, const unsigned tam){
+				(const Type *elems, const unsigned tam){
 	unsigned long long cont;
 
 	for(unsigned i = 0U, cont = 0ULL; i < tam; i++)
@@ -366,7 +397,7 @@ template <class Type> unsigned long long lista<Type>::count_elems
 }
 
 template <class Type> lista<Type> vetor_para_lista
-				(Type* vetor, const unsigned tam){
+				(const Type* vetor, const unsigned tam){
 	lista<Type> lista_return;
 	for(unsigned i = 0U; i < tam; i++)
 		lista_return += vetor[i];
@@ -525,8 +556,8 @@ void string::operator+=(const string str){
 	}}
 }
 
-void string::operator-=(unsigned long long quant_pos){
-	for(; quant_pos > 0ULL; quant_pos--)
+void string::operator-=(const unsigned long long celulas_a_remover){
+	for(unsigned long long i = 0ULL; i < celulas_a_remover; i++)
 		--(*this);
 }
 
@@ -617,4 +648,3 @@ string word(lista<string> palavras, const char caractere){
 		word += palavras[i];
 	}
 }
-

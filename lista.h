@@ -36,6 +36,7 @@
 
 static const char* fora_da_lista = "ERRO: Posição inexistente.\n";
 static const char* lista_vazia = "ERRO: Lista vazia.\n";
+static const char* remover_mais = "ERRO: Não há células suficientes para remover. Abortando.\n";
 
 template <class Type> class lista{
 private:
@@ -50,7 +51,7 @@ private:
 	no *inicio, *PosicaoAtual;
 	unsigned long long posicao, tamanho_lista;
 
-	inline void gotox(const unsigned long long pos);
+	void gotox(const unsigned long long pos);
 
 public:
 	lista();
@@ -60,14 +61,14 @@ public:
 	void gotopos(const unsigned long long pos);
 
 	/* Adiciona as células logo após a célula atual */
-	void addpos(unsigned long long qte_celulas);
-	void rmpos(unsigned long long qte_celulas = 1ULL);
+	void addpos(const unsigned long long celulas_a_adicionar);
+	void rmpos(const unsigned long long celulas_a_remover);
 
 	/* Retorna o tamanho da lista */
 	unsigned long long tam_lista();
 
 	/* Escreve o dado na posição atual da lista */
-	void escreve(Type a);
+	void escreve(const Type a);
 
 	/* Lê o dado na posição atual da lista */
 	Type le();
@@ -76,11 +77,10 @@ public:
 	lista<Type> operator+(const lista<Type> seg_lista);
 	lista<Type> operator-(const unsigned long long quant_pos);
 
-	inline void operator+=(const Type valor);
-
-	void operator=(lista<Type>);
-	void operator+=(lista<Type> seg_lista);
-	void operator-=(unsigned long long quant_pos);
+	void operator=(const  lista<Type>);
+	void operator+=(const Type valor);
+	void operator+=(const lista<Type> seg_lista);
+	void operator-=(const unsigned long long quant_pos);
 
 	void operator--();
 
@@ -97,16 +97,16 @@ public:
 
 	void esvazia();
 
-	bool have_elem(Type elem);
+	bool have_elem(const Type elem);
 
-	unsigned long long count_elem(Type elem);
-	unsigned long long count_elems(Type *elems, const unsigned tam);
+	unsigned long long count_elem(const Type elem);
+	unsigned long long count_elems(const Type *elems, const unsigned tam);
 
 	friend class string;
 };
 
 template <class Type> lista<Type> vetor_para_lista
-			(Type* vetor, const unsigned tam);
+			(const Type* vetor, const unsigned tam);
 
 class string: public lista<char> {
 
@@ -131,15 +131,15 @@ public:
 
 	void operator=(const string);
 	void operator+=(const string);
-	void operator-=(unsigned long long);
+	void operator-=(const unsigned long long celulas_a_remover);
 
 	void operator--();
 
-	void operator=(const char*);
-	void operator+=(const char*);
+	void operator=(const char* str);
+	void operator+=(const char* str);
 
-	bool operator==(const string);
-	bool operator!=(const string);
+	bool operator==(const string cmp);
+	bool operator!=(const string cmp);
 
 	bool operator==(const char* str);
 	bool operator!=(const char* str);
