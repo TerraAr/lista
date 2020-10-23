@@ -55,6 +55,9 @@ consequente "perda" de memória.
  - destruidor `~lista()`
    Desaloca as posições alocadas dinamicamente e destrói as variáveis
    estáticas.
+ - operador `Type*()`
+   Converte a lista lincada em um vetor alocado dinamicamente do
+   mesmo tipo.
  - `gotopos(unsigned long long pos)`
    Manda o cursor da lista para a posição especificada.
  - `addpos(unsigned long long qte_celulas)`

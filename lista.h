@@ -58,6 +58,8 @@ public:
 	lista(const lista&);
 	~lista();
 
+	operator Type*();
+
 	void gotopos(const unsigned long long pos);
 
 	/* Adiciona as células logo após a célula atual */

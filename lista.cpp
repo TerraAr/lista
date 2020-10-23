@@ -84,6 +84,20 @@ template <class Type> lista<Type>::~lista(){
 	free(inicio);
 }
 
+template <class Type> operator Type*(){
+	Type* vetor_retorno = (Type*) malloc(tamanho_lista * sizeof(Type));
+
+	{
+		no *aux = inicio;
+		for(unsigned long long i = 0U; i < tamanho_lista; i++){
+			*(vetor_retorno + i) = *aux;
+			aux = aux -> proximo;
+		}
+	}
+
+	return vetor_retorno;
+}
+
 template <class Type> void lista<Type>::gotopos(const unsigned long long pos){
 	if(pos > tamanho_lista){
 		fputs(fora_da_lista, stderr);
