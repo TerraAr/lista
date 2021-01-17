@@ -94,7 +94,7 @@ além de fazer as adaptações necessárias por conta do `'\0'` em seu fim.
  - `word(lista<string>, const char)`
    Forma uma string com as palavras da lista usando o caractere como
    conector.
- - `unword(cons char)`
+ - `unword(const char)`
    Quebra a string nos pontos onde o caractere aparece, formando uma
    lista de palavras.
 
