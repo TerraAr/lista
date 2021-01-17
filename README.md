@@ -97,3 +97,18 @@ além de fazer as adaptações necessárias por conta do `'\0'` em seu fim.
  - `unword(cons char)`
    Quebra a string nos pontos onde o caractere aparece, formando uma
    lista de palavras.
+
+## ToDo
+
+Seção que lista novas funções e recursos para serem implementados,
+*bugs* a serem corrigidos e demais pontos por fazer na biblioteca.
+
+ - Implementar funções `word` e `unword` com vetor de caracteres e
+   *strings* como último argumento;
+ - Implementar função para remover *strings* vazias de uma lista de
+   *strings*;
+ - Implementar funções de classe para busca de sub-*strings* numa
+   *string* (verificação de existência e contagem de aparições);
+ - Implementação de testes automáticos para novos *commits* da
+   biblioteca;
+ - Adicionar e melhorar comentários ao longo do código-fonte.
