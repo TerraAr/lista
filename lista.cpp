@@ -84,7 +84,7 @@ template <class Type> lista<Type>::~lista(){
 	free(inicio);
 }
 
-template <class Type> operator Type*(){
+template <class Type> lista<Type>::operator Type*(){
 	Type* vetor_retorno = (Type*) malloc(tamanho_lista * sizeof(Type));
 
 	{
@@ -661,4 +661,6 @@ string word(lista<string> palavras, const char caractere){
 		word += caractere;
 		word += palavras[i];
 	}
+
+	return word;
 }
