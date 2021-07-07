@@ -431,10 +431,13 @@ string::string(){
 }
 
 string::string(const string& str){
-	PosicaoAtual = inicio = NULL;
-	posicao = tamanho_lista = 0ULL;
+	do{
+		PosicaoAtual = inicio = (no*)malloc(sizeof(no));
+	}while(inicio == NULL);
+	tamanho_lista = 1ULL;
+	posicao = 0ULL;
 
-	addpos(str.tamanho_lista);
+	addpos(str.tamanho_lista - 1ULL);
 
 	/* Ponteiro auxiliar para percorrer a lista do início ao
 	 * fim sem precisar modificar as variáveis de controle */
@@ -468,9 +471,11 @@ lista<string> string::unword(const char caractere){
 			palavra += (*this)[i];
 		else{
 			resultado += palavra;
-			palavra -= palavra.tamanho_lista - 1ULL;
+			palavra.esvazia();
 		}
 	}
+
+	resultado += palavra;
 
 	return resultado;
 }
@@ -517,6 +522,15 @@ string string::operator-(const unsigned long long quant_pos){
 }
 
 void string::operator+=(const char caractere){
+	if(tamanho_lista == 0ULL){
+		do{
+			PosicaoAtual = inicio = (no*)malloc(sizeof(no));
+		}while(inicio == NULL);
+		posicao = 0ULL;
+		tamanho_lista++;
+
+		inicio -> dado = '\0';
+	}
 	if(tamanho_lista == 1ULL){
 		no* aux;
 
@@ -553,8 +567,18 @@ void string::operator+=(const char caractere){
 }
 
 void string::operator=(const string str){
-	(*this).esvazia();
-	(*this) += str;
+	/* Garante que a lista tenha o mesmo tamanho da que vai ser
+	 * copiada */
+	if(str.tamanho_lista < tamanho_lista)
+		(*this) -= tamanho_lista - str.tamanho_lista;
+	else if(str.tamanho_lista > tamanho_lista)
+		addpos(str.tamanho_lista - tamanho_lista);
+
+	{no* aux = str.inicio;
+	for(unsigned long long i = 0ULL; i < tamanho_lista; i++){
+		(*this)[i] = aux -> dado;
+		aux = aux -> proximo;
+	}}
 }
 
 void string::operator+=(const string str){
