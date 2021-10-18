@@ -58,18 +58,8 @@ consequente "perda" de memória.
  - operador `Type*()`
    Converte a lista lincada em um vetor alocado dinamicamente do
    mesmo tipo.
- - `gotopos(unsigned long long pos)`
-   Manda o cursor da lista para a posição especificada.
- - `addpos(unsigned long long qte_celulas)`
-   Adiciona `qte_celulas` imediatamente após a posição atual.
- - `rmpos(unsigned long long qte_celulas = 1)`
-   Remove `qte_celulas` da lista a partir da posição atual.
  - `tam_lista()`
    Devolve o tamanho da lista.
- - `escreve(Type a)`
-   Escreve o valor recebido na posição atual da lista.
- - `Type le()`
-   Retorna o valor armazenado na posição atual da lista.
  - `eVazia()`
    Verifica se a lista é vazia.
  - `esvazia()`
@@ -82,6 +72,21 @@ consequente "perda" de memória.
    Conta a quantidade de vezes que os elementos aparecem na lista.
  - `vetor_para_lista(Type* vetor, const unsigned tam)`
    Transforma o vetor dado em uma lista lincada do mesmo tipo.
+
+#### Funções de baixo nível
+ Funções para controle fino da lista, permitindo inclusive a adição e
+ retirada de elementos do meio da lista.
+
+ - `gotopos(unsigned long long pos)`
+   Manda o cursor da lista para a posição especificada.
+ - `addpos(unsigned long long qte_celulas)`
+   Adiciona `qte_celulas` imediatamente após a posição atual.
+ - `rmpos(unsigned long long qte_celulas = 1)`
+   Remove `qte_celulas` da lista a partir da posição atual.
+ - `escreve(Type a)`
+   Escreve o valor recebido na posição atual da lista.
+ - `Type le()`
+   Retorna o valor armazenado na posição atual da lista.
 
 ## String
 
