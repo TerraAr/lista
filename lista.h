@@ -39,7 +39,7 @@ static const char* lista_vazia = "ERRO: Lista vazia.\n";
 static const char* remover_mais = "ERRO: Não há células suficientes para remover. Abortando.\n";
 
 template <class Type> class lista{
-private:
+protected:
 	class no{
 		public:
 		no *anterior;
@@ -103,8 +103,6 @@ public:
 
 	unsigned long long count_elem(const Type elem);
 	unsigned long long count_elems(const Type *elems, const unsigned tam);
-
-	friend class string;
 };
 
 template <class Type> lista<Type> vetor_para_lista
