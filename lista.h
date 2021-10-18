@@ -210,7 +210,7 @@ template <class Type> lista<Type>::operator Type*(){
 	{
 		no *aux = inicio;
 		for(unsigned long long i = 0U; i < tamanho_lista; i++){
-			*(vetor_retorno + i) = (*aux).dado;
+			*(vetor_retorno + i) = aux->dado;
 			aux = aux -> proximo;
 		}
 	}
