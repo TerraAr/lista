@@ -413,35 +413,16 @@ template <class Type> void lista<Type>::operator+=
 
 template <class Type> void lista<Type>::operator-=
 				(const unsigned long long quant_pos){
-	for(unsigned long long i = 0ULL; i < quant_pos; i++)
-		(*this)--;
+	for(unsigned long long i = 0ULL; i < quant_pos; i++){
+		gotox(tamanho_lista - 1ULL);
+		rmpos(1ULL);
+	}
 }
 
 template <class Type> void lista<Type>::operator--(){
-	/* Verifica se a lista é vazia */
-	if(tamanho_lista == 0ULL){
-		/* Se for, dá mensagem de erro */
-		fputs(lista_vazia, stderr);
-		return;
-	}
-	/* Verifica se é célula única */
-	if(tamanho_lista == 1ULL){
-		/* Libera a única célula */
-		free(inicio);
-		PosicaoAtual = inicio = NULL;
-		tamanho_lista = 0ULL;
-		return;
-	}
-
-	/* Vai até a penultima posição */
-	gotox(tamanho_lista - 2ULL);
-
-	/* Libera a última posição */
-	free(PosicaoAtual -> proximo);
-
-	/* Ajusta a célula e o cabeçalho da lista */
-	PosicaoAtual -> proximo = NULL;
-	tamanho_lista--;
+	/* Remove a última célula */
+	gotox(tamanho_lista - 1ULL);
+	rmpos(1ULL);
 }
 
 template <class Type> bool lista<Type>::operator==
